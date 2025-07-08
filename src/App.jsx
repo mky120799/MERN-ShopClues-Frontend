@@ -16,27 +16,31 @@ import Checkout from './pages/Checkout';
 import ProductDetailPage from './pages/ProductDetailPage';
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Home></Home>,
   },
   {
-    path: '/login',
+    path: "/login",
     element: <LoginPage></LoginPage>,
   },
   {
-    path: '/signup',
+    path: "/signup",
     element: <SignupPage></SignupPage>,
   },
-  { 
-    path: '/cart',
+  {
+    path: "/cart",
     element: <CartPage></CartPage>,
   },
-  { 
-    path: '/checkout',
+  {
+    path: "/checkout",
     element: <Checkout></Checkout>,
   },
-  { 
-    path: '/product-detail',
+  {
+    path: "/product-detail",
+    element: <ProductDetailPage></ProductDetailPage>,
+  },
+  {
+    path: "/product-detail/:id",
     element: <ProductDetailPage></ProductDetailPage>,
   },
 ]);
