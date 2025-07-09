@@ -4,6 +4,8 @@ import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProductByIdAsync, selectProductById } from "../productSlice";
 import { useParams } from "react-router-dom";
+import { addToCartAsync } from "../../cart/cartSlice";
+import { selectLoggedInUser } from "../../auth/authSlice";
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
 
@@ -39,11 +41,17 @@ function classNames(...classes) {
 export default function ProductDetail() {
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
+  const user = useSelector(selectLoggedInUser);
   const product = useSelector(selectProductById);
-  console.log("this is breadcrmb",product?.breadcrumbs)
-  // console.log('product in the product details page', product)
   const dispatch = useDispatch();
   const params = useParams();
+
+  const handleCart = (e) => {
+    e.preventDefault();
+    const newItem = { ...product, quantity: 1, user: user.id };
+    delete newItem["id"];
+    dispatch(addToCartAsync(newItem));
+  };
 
   useEffect(() => {
     dispatch(fetchAllProductByIdAsync(params.id));
@@ -51,7 +59,6 @@ export default function ProductDetail() {
 
   return (
     <div className="bg-white">
-   
       {product && (
         <div className="pt-6">
           <nav aria-label="Breadcrumb">
@@ -84,7 +91,7 @@ export default function ProductDetail() {
                 ))}
               <li className="text-sm">
                 <a
-                  href={product.thumbnail}
+                  href={product.href}
                   aria-current="page"
                   className="font-medium text-gray-500 hover:text-gray-600"
                 >
@@ -98,39 +105,33 @@ export default function ProductDetail() {
           <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
             <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
               <img
-                src={product.images?.[0]}
-                
+                src={product.images[0]}
                 alt={product.title}
                 className="h-full w-full object-cover object-center"
-                onError={(e) => {
-                  e.target.src =
-                    "https://via.placeholder.com/300?text=No+Image";
-                }}
               />
             </div>
             <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
               <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                 <img
-                  src={product.images?.[1]}
+                  src={product.images[1]}
                   alt={product.title}
                   className="h-full w-full object-cover object-center"
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/300?text=No+Image";
-                  }}
                 />
               </div>
               <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                 <img
-                  src={product.images?.[2]}
+                  src={product.images[2]}
                   alt={product.title}
                   className="h-full w-full object-cover object-center"
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/300?text=No+Image";
-                  }}
                 />
               </div>
+            </div>
+            <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
+              <img
+                src={product.images[3]}
+                alt={product.title}
+                className="h-full w-full object-cover object-center"
+              />
             </div>
           </div>
 
@@ -296,6 +297,7 @@ export default function ProductDetail() {
                 </div>
 
                 <button
+                  onClick={handleCart}
                   type="submit"
                   className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
