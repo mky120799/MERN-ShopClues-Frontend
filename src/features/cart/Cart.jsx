@@ -13,8 +13,9 @@ import { Navigate } from "react-router-dom";
 export default function Cart() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
-
+  
   const items = useSelector(selectItems);
+  console.log('items in cart page',items)
   const totalAmount = items.reduce(
     (amount, item) => item.price * item.quantity + amount,
     0
@@ -22,7 +23,7 @@ export default function Cart() {
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
 
   const handleQuantity = (e, item) => {
-    dispatch(updateCartAsync({ ...item, quantity: +e.target.value }));
+    dispatch(updateCartAsync({ ...item, quantity: e.target.value }));
   };
 
   const handleRemove = (e, id) => {
