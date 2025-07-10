@@ -1,21 +1,14 @@
-import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
-import { selectLoggedInUser } from '../authSlice'
-import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { selectLoggedInUser } from "../authSlice";
 
-function Protected({children}) {
-    const location = useLocation();
-    console.log("Current route is:", location.pathname);
-    const user = useSelector(selectLoggedInUser)
-    console.log('this is the user when logged in',user)
+function Protected({ children }) {
+  const user = useSelector(selectLoggedInUser);
+
   if (!user) {
-    return <Navigate to='/login' replace={true} />;
+    return <Navigate to="/login" replace={true}></Navigate>;
   }
-  return (
-    <div>
-      {children}
-    </div>
-  )
+  return children;
 }
 
-export default Protected
+export default Protected;
