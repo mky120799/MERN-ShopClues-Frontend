@@ -1,3 +1,4 @@
+import { Counter } from "./features/counter/Counter";
 import "./App.css";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
@@ -24,8 +25,13 @@ import AdminHome from "./pages/AdminHome";
 import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import AdminProductFormPage from "./pages/AdminProductFormPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { positions, Provider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
+
+const options = {
+  timeout: 5000,
+  position: positions.BOTTOM_LEFT,
+};
 
 const router = createBrowserRouter([
   {
@@ -110,15 +116,27 @@ const router = createBrowserRouter([
   },
   {
     path: "/order-success/:id",
-    element: <OrderSuccessPage></OrderSuccessPage>,
+    element: (
+      <Protected>
+        <OrderSuccessPage></OrderSuccessPage>{" "}
+      </Protected>
+    ),
   },
   {
     path: "/orders",
-    element: <UserOrdersPage></UserOrdersPage>,
+    element: (
+      <Protected>
+        <UserOrdersPage></UserOrdersPage>{" "}
+      </Protected>
+    ),
   },
   {
     path: "/profile",
-    element: <UserProfilePage></UserProfilePage>,
+    element: (
+      <Protected>
+        <UserProfilePage></UserProfilePage>{" "}
+      </Protected>
+    ),
   },
   {
     path: "/logout",
@@ -148,8 +166,10 @@ function App() {
   return (
     <>
       <div className="App">
-        <RouterProvider router={router} />
-        <ToastContainer position="bottom-left" autoClose={5000} />
+        <Provider template={AlertTemplate} {...options}>
+          <RouterProvider router={router} />
+        </Provider>
+        {/* Link must be inside the Provider */}
       </div>
     </>
   );

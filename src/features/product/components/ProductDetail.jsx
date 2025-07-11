@@ -11,8 +11,8 @@ import { useParams } from "react-router-dom";
 import { addToCartAsync, selectItems } from "../../cart/cartSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
 import { discountedPrice } from "../../../app/constants";
-import { toast } from "react-toastify";
-import { ClipLoader } from "react-spinners";
+import { useAlert } from "react-alert";
+import { Grid } from "react-loader-spinner";
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
 
@@ -53,23 +53,23 @@ export default function ProductDetail() {
   const product = useSelector(selectProductById);
   const dispatch = useDispatch();
   const params = useParams();
+  const alert = useAlert();
   const status = useSelector(selectProductListStatus);
 
   const handleCart = (e) => {
     e.preventDefault();
-    if (items.findIndex((item) => item.productId === product.id) < 0) {
+    if (items.findIndex((item) => item.product.id === product.id) < 0) {
       console.log({ items, product });
       const newItem = {
-        ...product,
-        productId: product.id,
+        product: product.id,
         quantity: 1,
         user: user.id,
       };
-      delete newItem["id"];
       dispatch(addToCartAsync(newItem));
-      toast.success("Item added to Cart");
+      // TODO: it will be based on server response of backend
+      alert.success("Item added to Cart");
     } else {
-      toast.error("Item Already added");
+      alert.error("Item Already added");
     }
   };
 
@@ -80,13 +80,16 @@ export default function ProductDetail() {
   return (
     <div className="bg-white">
       {status === "loading" ? (
-        <div className="flex justify-center items-center h-40">
-          <ClipLoader
-            color="rgb(79, 70, 229)"
-            loading={true}
-            size={50}
-          />
-        </div>
+        <Grid
+          height="80"
+          width="80"
+          color="rgb(79, 70, 229) "
+          ariaLabel="grid-loading"
+          radius="12.5"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
       ) : null}
       {product && (
         <div className="pt-6">
