@@ -54,14 +54,14 @@ export default function UserProfile() {
       <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
           <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">
-            Name: {user.name ? user.name : "New User"}
+            Name: {user?.name ? user?.name : "New User"}
           </h1>
           <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
-            email address : {user.email}
+            email address : {user?.email}
           </h3>
           {user.role === "admin" && (
             <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
-              role : {user.role}
+              role : {user?.role}
             </h3>
           )}
         </div>
@@ -114,7 +114,7 @@ export default function UserProfile() {
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                         {errors.name && (
-                          <p className="text-red-500">{errors.name.message}</p>
+                          <p className="text-red-500">{errors?.name?.message}</p>
                         )}
                       </div>
                     </div>
@@ -136,7 +136,7 @@ export default function UserProfile() {
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                         {errors.email && (
-                          <p className="text-red-500">{errors.email.message}</p>
+                          <p className="text-red-500">{errors?.email?.message}</p>
                         )}
                       </div>
                     </div>
@@ -158,7 +158,7 @@ export default function UserProfile() {
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                         {errors.phone && (
-                          <p className="text-red-500">{errors.phone.message}</p>
+                          <p className="text-red-500">{errors?.phone?.message}</p>
                         )}
                       </div>
                     </div>
@@ -205,7 +205,7 @@ export default function UserProfile() {
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                         {errors.city && (
-                          <p className="text-red-500">{errors.city.message}</p>
+                          <p className="text-red-500">{errors?.city?.message}</p>
                         )}
                       </div>
                     </div>
@@ -226,8 +226,8 @@ export default function UserProfile() {
                           id="state"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
-                        {errors.state && (
-                          <p className="text-red-500">{errors.state.message}</p>
+                        {errors?.state && (
+                          <p className="text-red-500">{errors?.state?.message}</p>
                         )}
                       </div>
                     </div>
@@ -248,9 +248,9 @@ export default function UserProfile() {
                           id="pinCode"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
-                        {errors.pinCode && (
+                        {errors?.pinCode && (
                           <p className="text-red-500">
-                            {errors.pinCode.message}
+                            {errors?.pinCode?.message}
                           </p>
                         )}
                       </div>

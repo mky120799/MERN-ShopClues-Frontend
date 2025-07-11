@@ -9,7 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { discountedPrice } from "../../app/constants";
-import { Grid } from "react-loader-spinner";
+import { ClipLoader } from "react-spinners";
 import Modal from "../common/Modal";
 
 export default function Cart() {
@@ -45,16 +45,13 @@ export default function Cart() {
             </h1>
             <div className="flow-root">
               {status === "loading" ? (
-                <Grid
-                  height="80"
-                  width="80"
-                  color="rgb(79, 70, 229) "
-                  ariaLabel="grid-loading"
-                  radius="12.5"
-                  wrapperStyle={{}}
-                  wrapperClass=""
-                  visible={true}
-                />
+                <div className="flex justify-center items-center h-40">
+                  <ClipLoader
+                    color="rgb(79, 70, 229)"
+                    loading={true}
+                    size={50}
+                  />
+                </div>
               ) : null}
               <ul className="-my-6 divide-y divide-gray-200">
                 {items.map((item) => (

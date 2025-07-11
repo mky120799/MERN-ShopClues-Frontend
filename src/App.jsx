@@ -24,13 +24,8 @@ import AdminHome from "./pages/AdminHome";
 import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import AdminProductFormPage from "./pages/AdminProductFormPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
-import { positions, Provider } from "react-alert";
-import AlertTemplate from "react-alert-template-basic";
-
-const options = {
-  timeout: 5000,
-  position: positions.BOTTOM_LEFT,
-};
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -153,10 +148,8 @@ function App() {
   return (
     <>
       <div className="App">
-        <Provider template={AlertTemplate} {...options}>
-          <RouterProvider router={router} />
-        </Provider>
-        {/* Link must be inside the Provider */}
+        <RouterProvider router={router} />
+        <ToastContainer position="bottom-left" autoClose={5000} />
       </div>
     </>
   );

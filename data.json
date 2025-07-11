@@ -125,7 +125,8 @@
           ],
           "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
           "quantity": 1,
-          "user": "5a72"
+          "user": "5a72",
+          "role": "admin"
         },
         {
           "id": "4",
@@ -784,15 +785,16 @@
       "id": "5a72",
       "email": "ravi@gmail.com",
       "password": "Mithilesh@123",
+      "role": "admin",
       "addresses": [
         {
           "name": "roahan",
           "email": "rohan@gmaio.com",
-          "phone": "1234567896",
-          "street": "vinston street",
           "city": "varanasi",
-          "state": "uttar pradesh",
-          "pinCode": "231207"
+          "state": "Madhya Pradesh",
+          "pinCode": "231207",
+          "phone": "1234567896",
+          "street": "vinston street"
         },
         {
           "name": "ravirav",
@@ -811,6 +813,24 @@
           "city": "fvvb",
           "state": "sdcdzc",
           "pinCode": "sdc"
+        },
+        {
+          "name": "Mithilesh",
+          "email": "mithilesh@fakemail.com",
+          "phone": "9919729620",
+          "street": "vikash marg road",
+          "city": "gurgoan",
+          "state": "haryana",
+          "pinCode": "231207"
+        },
+        {
+          "name": "Shashwat Rana",
+          "email": "Rana@fake.com",
+          "phone": "9919729622",
+          "street": "st. paul north 56",
+          "city": "gurgaon",
+          "state": "Harayana",
+          "pinCode": "231207"
         }
       ]
     }

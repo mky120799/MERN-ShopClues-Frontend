@@ -11,8 +11,8 @@ import { useParams } from "react-router-dom";
 import { addToCartAsync, selectItems } from "../../cart/cartSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
 import { discountedPrice } from "../../../app/constants";
-import { useAlert } from "react-alert";
-import { Grid } from "react-loader-spinner";
+import { toast } from "react-toastify";
+import { ClipLoader } from "react-spinners";
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
 
@@ -53,7 +53,6 @@ export default function ProductDetail() {
   const product = useSelector(selectProductById);
   const dispatch = useDispatch();
   const params = useParams();
-  const alert = useAlert();
   const status = useSelector(selectProductListStatus);
 
   const handleCart = (e) => {
@@ -68,10 +67,9 @@ export default function ProductDetail() {
       };
       delete newItem["id"];
       dispatch(addToCartAsync(newItem));
-      // TODO: it will be based on server response of backend
-      alert.error("Item added to Cart");
+      toast.success("Item added to Cart");
     } else {
-      alert.error("Item Already added");
+      toast.error("Item Already added");
     }
   };
 
@@ -82,16 +80,13 @@ export default function ProductDetail() {
   return (
     <div className="bg-white">
       {status === "loading" ? (
-        <Grid
-          height="80"
-          width="80"
-          color="rgb(79, 70, 229) "
-          ariaLabel="grid-loading"
-          radius="12.5"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
-        />
+        <div className="flex justify-center items-center h-40">
+          <ClipLoader
+            color="rgb(79, 70, 229)"
+            loading={true}
+            size={50}
+          />
+        </div>
       ) : null}
       {product && (
         <div className="pt-6">

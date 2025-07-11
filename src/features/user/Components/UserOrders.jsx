@@ -13,7 +13,9 @@ export default function UserOrders() {
   const orders = useSelector(selectUserOrders);
 
   useEffect(() => {
-    dispatch(fetchLoggedInUserOrderAsync(user.id));
+    if (user?.id) {
+      dispatch(fetchLoggedInUserOrderAsync(user.id));
+    }
   }, [dispatch, user]);
 
   return (
@@ -88,22 +90,22 @@ export default function UserOrders() {
                   <div className="flex gap-x-4">
                     <div className="min-w-0 flex-auto">
                       <p className="text-sm font-semibold leading-6 text-gray-900">
-                        {order.selectedAddress.name}
+                        {order.selectedAddress?.name || "N/A"}
                       </p>
                       <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                        {order.selectedAddress.street}
+                        {order.selectedAddress?.street || "N/A"}
                       </p>
                       <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                        {order.selectedAddress.pinCode}
+                        {order.selectedAddress?.pinCode || "N/A"}
                       </p>
                     </div>
                   </div>
                   <div className="hidden sm:flex sm:flex-col sm:items-end">
                     <p className="text-sm leading-6 text-gray-900">
-                      Phone: {order.selectedAddress.phone}
+                      Phone: {order.selectedAddress?.phone || "N/A"}
                     </p>
                     <p className="text-sm leading-6 text-gray-500">
-                      {order.selectedAddress.city}
+                      {order.selectedAddress?.city || "N/A"}
                     </p>
                   </div>
                 </div>
