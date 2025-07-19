@@ -975,6 +975,13 @@
       "password": "Mithilesh@123",
       "addresses": [],
       "role": "user"
+    },
+    {
+      "id": "af81",
+      "email": "abc@gmail.com",
+      "password": "Mithilesh@123",
+      "addresses": [],
+      "role": "user"
     }
   ],
   "products": [

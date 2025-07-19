@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { selectUserInfo, updateUserAsync } from "../userSlice";
-import { useForm } from "react-hook-form";
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUserInfo, updateUserAsync } from '../userSlice';
+import { useForm } from 'react-hook-form';
 
 export default function UserProfile() {
   const dispatch = useDispatch();
@@ -9,7 +9,6 @@ export default function UserProfile() {
   const [selectedEditIndex, setSelectedEditIndex] = useState(-1);
   const [showAddAddressForm, setShowAddAddressForm] = useState(false);
 
-  //TODO: We will add payment section when we work on backend.
 
   const {
     register,
@@ -34,20 +33,17 @@ export default function UserProfile() {
   const handleEditForm = (index) => {
     setSelectedEditIndex(index);
     const address = userInfo.addresses[index];
-    setValue("name", address.name);
-    setValue("email", address.email);
-    setValue("city", address.city);
-    setValue("state", address.state);
-    setValue("pinCode", address.pinCode);
-    setValue("phone", address.phone);
-    setValue("street", address.street);
+    setValue('name', address.name);
+    setValue('email', address.email);
+    setValue('city', address.city);
+    setValue('state', address.state);
+    setValue('pinCode', address.pinCode);
+    setValue('phone', address.phone);
+    setValue('street', address.street);
   };
 
   const handleAdd = (address) => {
-    const newUser = {
-      ...userInfo,
-      addresses: [...userInfo.addresses, address],
-    };
+    const newUser = { ...userInfo, addresses: [...userInfo.addresses, address] };
     dispatch(updateUserAsync(newUser));
     setShowAddAddressForm(false);
   };
@@ -57,12 +53,12 @@ export default function UserProfile() {
       <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
           <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">
-            Name: {userInfo.name ? userInfo.name : "New User"}
+            Name: {userInfo.name ? userInfo.name : 'New User'}
           </h1>
           <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
             email address : {userInfo.email}
           </h3>
-          {userInfo.role === "admin" && (
+          {userInfo.role === 'admin' && (
             <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
               role : {userInfo.role}
             </h3>
@@ -110,8 +106,8 @@ export default function UserProfile() {
                       <div className="mt-2">
                         <input
                           type="text"
-                          {...register("name", {
-                            required: "name is required",
+                          {...register('name', {
+                            required: 'name is required',
                           })}
                           id="name"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -132,8 +128,8 @@ export default function UserProfile() {
                       <div className="mt-2">
                         <input
                           id="email"
-                          {...register("email", {
-                            required: "email is required",
+                          {...register('email', {
+                            required: 'email is required',
                           })}
                           type="email"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -154,8 +150,8 @@ export default function UserProfile() {
                       <div className="mt-2">
                         <input
                           id="phone"
-                          {...register("phone", {
-                            required: "phone is required",
+                          {...register('phone', {
+                            required: 'phone is required',
                           })}
                           type="tel"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -176,8 +172,8 @@ export default function UserProfile() {
                       <div className="mt-2">
                         <input
                           type="text"
-                          {...register("street", {
-                            required: "street is required",
+                          {...register('street', {
+                            required: 'street is required',
                           })}
                           id="street"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -200,8 +196,8 @@ export default function UserProfile() {
                       <div className="mt-2">
                         <input
                           type="text"
-                          {...register("city", {
-                            required: "city is required",
+                          {...register('city', {
+                            required: 'city is required',
                           })}
                           id="city"
                           autoComplete="address-level2"
@@ -223,8 +219,8 @@ export default function UserProfile() {
                       <div className="mt-2">
                         <input
                           type="text"
-                          {...register("state", {
-                            required: "state is required",
+                          {...register('state', {
+                            required: 'state is required',
                           })}
                           id="state"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -245,8 +241,8 @@ export default function UserProfile() {
                       <div className="mt-2">
                         <input
                           type="text"
-                          {...register("pinCode", {
-                            required: "pinCode is required",
+                          {...register('pinCode', {
+                            required: 'pinCode is required',
                           })}
                           id="pinCode"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -306,8 +302,8 @@ export default function UserProfile() {
                           <div className="mt-2">
                             <input
                               type="text"
-                              {...register("name", {
-                                required: "name is required",
+                              {...register('name', {
+                                required: 'name is required',
                               })}
                               id="name"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -330,8 +326,8 @@ export default function UserProfile() {
                           <div className="mt-2">
                             <input
                               id="email"
-                              {...register("email", {
-                                required: "email is required",
+                              {...register('email', {
+                                required: 'email is required',
                               })}
                               type="email"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -354,8 +350,8 @@ export default function UserProfile() {
                           <div className="mt-2">
                             <input
                               id="phone"
-                              {...register("phone", {
-                                required: "phone is required",
+                              {...register('phone', {
+                                required: 'phone is required',
                               })}
                               type="tel"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -378,8 +374,8 @@ export default function UserProfile() {
                           <div className="mt-2">
                             <input
                               type="text"
-                              {...register("street", {
-                                required: "street is required",
+                              {...register('street', {
+                                required: 'street is required',
                               })}
                               id="street"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -402,8 +398,8 @@ export default function UserProfile() {
                           <div className="mt-2">
                             <input
                               type="text"
-                              {...register("city", {
-                                required: "city is required",
+                              {...register('city', {
+                                required: 'city is required',
                               })}
                               id="city"
                               autoComplete="address-level2"
@@ -427,8 +423,8 @@ export default function UserProfile() {
                           <div className="mt-2">
                             <input
                               type="text"
-                              {...register("state", {
-                                required: "state is required",
+                              {...register('state', {
+                                required: 'state is required',
                               })}
                               id="state"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -451,8 +447,8 @@ export default function UserProfile() {
                           <div className="mt-2">
                             <input
                               type="text"
-                              {...register("pinCode", {
-                                required: "pinCode is required",
+                              {...register('pinCode', {
+                                required: 'pinCode is required',
                               })}
                               id="pinCode"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
