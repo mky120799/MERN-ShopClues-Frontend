@@ -1,7 +1,9 @@
 import { BASE_URL } from "../../config/baseUrl";
 export function fetchProductById(id) {
   return new Promise(async (resolve) => {
-    const response = await fetch(`${BASE_URL}/products/` + id);
+    const response = await fetch(`${BASE_URL}/products/` + id, {
+      credentials: 'include',
+    });
 
     const data = await response.json();
 
@@ -16,6 +18,7 @@ export function createProduct(product) {
       method: 'POST',
       body: JSON.stringify(product),
       headers: { 'content-type': 'application/json' },
+      credentials: 'include',
     });
     const data = await response.json();
     resolve({ data });
@@ -29,6 +32,7 @@ export function updateProduct(update) {
         method: 'PATCH',
         body: JSON.stringify(update),
         headers: { 'content-type': 'application/json' },
+        credentials: 'include',
       }
     );
     const data = await response.json();
@@ -60,8 +64,9 @@ export function fetchProductsByFilters(filter, sort, pagination, admin) {
   }
 
   return new Promise(async (resolve) => {
-    const response = await fetch(`${BASE_URL}/products?` + queryString
-    );
+    const response = await fetch(`${BASE_URL}/products?` + queryString, {
+      credentials: 'include',
+    });
     const data = await response.json();
     const totalItems = await response.headers.get('X-Total-Count');
     resolve({ data: { products: data, totalItems: +totalItems } });
@@ -70,7 +75,9 @@ export function fetchProductsByFilters(filter, sort, pagination, admin) {
 
 export function fetchCategories() {
   return new Promise(async (resolve) => {
-    const response = await fetch(`${BASE_URL}/categories`);
+    const response = await fetch(`${BASE_URL}/categories`, {
+      credentials: 'include',
+    });
     const data = await response.json();
     resolve({ data });
   });
@@ -78,7 +85,9 @@ export function fetchCategories() {
 
 export function fetchBrands() {
   return new Promise(async (resolve) => {
-    const response = await fetch(`${BASE_URL}/brands`);
+    const response = await fetch(`${BASE_URL}/brands`, {
+      credentials: 'include',
+    });
     const data = await response.json();
     resolve({ data });
   });

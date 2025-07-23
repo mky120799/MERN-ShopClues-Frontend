@@ -1,7 +1,9 @@
 import { BASE_URL } from "../../config/baseUrl";
 export function fetchLoggedInUserOrders() {
   return new Promise(async (resolve) =>{
-    const response = await fetch(`${BASE_URL}/orders/own/`) 
+    const response = await fetch(`${BASE_URL}/orders/own/`, {
+      credentials: 'include'
+    })
     const data = await response.json()
     resolve({data})
   }
@@ -11,7 +13,9 @@ export function fetchLoggedInUserOrders() {
 
 export function fetchLoggedInUser() {
   return new Promise(async (resolve) =>{
-    const response = await fetch(`${BASE_URL}/users/own`) 
+    const response = await fetch(`${BASE_URL}/users/own`, {
+      credentials: 'include'
+    })
     const data = await response.json()
     resolve({data})
   }
@@ -24,6 +28,7 @@ export function updateUser(update) {
       method: 'PATCH',
       body: JSON.stringify(update),
       headers: { 'content-type': 'application/json' },
+      credentials: 'include'
     });
     const data = await response.json();
     resolve({ data });

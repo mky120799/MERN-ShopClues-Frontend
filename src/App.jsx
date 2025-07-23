@@ -33,11 +33,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import StripeCheckout from './pages/StripeCheckout';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import ProductList from './features/product/components/ProductList';
 
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: (
       <Protected>
         <Home></Home>
@@ -45,7 +46,15 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/admin',
+    path: "/products",
+    element: (
+      <Protected>
+        <ProductList></ProductList>
+      </Protected>
+    ),
+  },
+  {
+    path: "/admin",
     element: (
       <ProtectedAdmin>
         <AdminHome></AdminHome>
@@ -53,15 +62,15 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/login',
+    path: "/login",
     element: <LoginPage></LoginPage>,
   },
   {
-    path: '/signup',
+    path: "/signup",
     element: <SignupPage></SignupPage>,
   },
   {
-    path: '/cart',
+    path: "/cart",
     element: (
       <Protected>
         <CartPage></CartPage>
@@ -69,7 +78,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/checkout',
+    path: "/checkout",
     element: (
       <Protected>
         <Checkout></Checkout>
@@ -77,7 +86,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/product-detail/:id',
+    path: "/product-detail/:id",
     element: (
       <Protected>
         <ProductDetailPage></ProductDetailPage>
@@ -85,7 +94,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/admin/product-detail/:id',
+    path: "/admin/product-detail/:id",
     element: (
       <ProtectedAdmin>
         <AdminProductDetailPage></AdminProductDetailPage>
@@ -93,7 +102,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/admin/product-form',
+    path: "/admin/product-form",
     element: (
       <ProtectedAdmin>
         <AdminProductFormPage></AdminProductFormPage>
@@ -101,7 +110,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/admin/orders',
+    path: "/admin/orders",
     element: (
       <ProtectedAdmin>
         <AdminOrdersPage></AdminOrdersPage>
@@ -109,7 +118,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/admin/product-form/edit/:id',
+    path: "/admin/product-form/edit/:id",
     element: (
       <ProtectedAdmin>
         <AdminProductFormPage></AdminProductFormPage>
@@ -117,31 +126,31 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/order-success/:id',
+    path: "/order-success/:id",
     element: (
       <Protected>
-        <OrderSuccessPage></OrderSuccessPage>{' '}
+        <OrderSuccessPage></OrderSuccessPage>{" "}
       </Protected>
     ),
   },
   {
-    path: '/my-orders',
+    path: "/my-orders",
     element: (
       <Protected>
-        <UserOrdersPage></UserOrdersPage>{' '}
+        <UserOrdersPage></UserOrdersPage>{" "}
       </Protected>
     ),
   },
   {
-    path: '/profile',
+    path: "/profile",
     element: (
       <Protected>
-        <UserProfilePage></UserProfilePage>{' '}
+        <UserProfilePage></UserProfilePage>{" "}
       </Protected>
     ),
   },
   {
-    path: '/stripe-checkout/',
+    path: "/stripe-checkout/",
     element: (
       <Protected>
         <StripeCheckout></StripeCheckout>
@@ -149,19 +158,19 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/logout',
+    path: "/logout",
     element: <Logout></Logout>,
   },
   {
-    path: '/forgot-password',
+    path: "/forgot-password",
     element: <ForgotPasswordPage></ForgotPasswordPage>,
   },
   {
-    path: '/reset-password',
+    path: "/reset-password",
     element: <ResetPasswordPage></ResetPasswordPage>,
   },
   {
-    path: '*',
+    path: "*",
     element: <PageNotFound></PageNotFound>,
   },
 ]);
