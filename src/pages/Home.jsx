@@ -8,13 +8,18 @@ import TopCategories from "../features/home/TopCategories";
 
 function Home() {
     return (
-      <div className="bg-[#EEF7FA] min-h-screen">
+      <div className="bg-[##FFFFFF] lg:bg-[#EEF7FA] min-h-screen relative">
         <NavBar>
-          <CategoryNavbar></CategoryNavbar>
-          <HeroBanner />
-          <DealsOfTheDay />
-          <TopCategories />
+          <div className="hidden lg:block">
+            <CategoryNavbar></CategoryNavbar>
+            <HeroBanner />
+            <DealsOfTheDay />
+            <TopCategories />
+          </div>
         </NavBar>
+        <div className="block lg:hidden top-[10px]">
+          <ProductList></ProductList>
+        </div>
         <Footer></Footer>
       </div>
     );

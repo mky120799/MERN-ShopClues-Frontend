@@ -19,7 +19,7 @@ import { fetchProductsByFiltersAsync, setSearchQuery } from '../product/productS
 
 
 const navigation = [
-  { name: 'Products', link: '/', user: true },
+  { name: 'Products', link: '/products', user: true },
   { name: 'Products', link: '/admin', admin: true },
   { name: 'Orders', link: '/admin/orders', admin: true },
 
@@ -56,7 +56,8 @@ function NavBar({ children }) {
 
 
   return (
-    <>
+    <div>
+      {" "}
       {userInfo && (
         <div className="min-h-full">
           <Disclosure
@@ -67,7 +68,32 @@ function NavBar({ children }) {
               <>
                 <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
                   <div className="flex h-20 items-center justify-between gap-4 flex-nowrap">
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-2 md:hidden">
+                      <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-black focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                        <span className="sr-only">Open main menu</span>
+                        {open ? (
+                          <XMarkIcon
+                            className="block h-6 w-6"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <Bars3Icon
+                            className="block h-6 w-6"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </Disclosure.Button>
+                      <div className="flex-shrink-0">
+                        <Link to="/">
+                          <img
+                            className="h-16 w-28"
+                            src={companyLogo}
+                            alt="Your Company"
+                          />
+                        </Link>
+                      </div>
+                    </div>
+                    <div className="hidden md:flex items-center">
                       <div className="flex-shrink-0">
                         <Link to="/">
                           <img
@@ -100,17 +126,19 @@ function NavBar({ children }) {
                       </div>
                     </div>
 
-                    <div className="hidden md:flex md:items-center md:justify-center flex-1 px-4">
+                    <div className="hidden md:flex items-center justify-center flex-1 px-4">
                       <div className="w-full md:max-w-lg relative">
                         <div className="flex">
                           <input
                             type="text"
                             value={searchQuery}
-                            onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+                            onChange={(e) =>
+                              dispatch(setSearchQuery(e.target.value))
+                            }
                             placeholder="Search for products, brands and more"
                             className="flex-grow rounded-l-md border border-gray-300 bg-[#E8F6F7] px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             onKeyDown={(e) => {
-                              if (e.key === 'Enter') handleSearch();
+                              if (e.key === "Enter") handleSearch();
                             }}
                           />
                           <button
@@ -123,14 +151,22 @@ function NavBar({ children }) {
                           <button
                             type="button"
                             onClick={() => {
-                              dispatch(setSearchQuery(''));
-                              dispatch(fetchProductsByFiltersAsync({ filter: {}, sort: {}, pagination: { _page: 1, _limit: 10 } }));
-
-                              // Remove 'q' query parameter from URL and clear location search
+                              dispatch(setSearchQuery(""));
+                              dispatch(
+                                fetchProductsByFiltersAsync({
+                                  filter: {},
+                                  sort: {},
+                                  pagination: { _page: 1, _limit: 10 },
+                                })
+                              );
                               const url = new URL(window.location);
-                              url.searchParams.delete('q');
-                              const newUrl = url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : '');
-                              window.history.replaceState({}, '', newUrl);
+                              url.searchParams.delete("q");
+                              const newUrl =
+                                url.pathname +
+                                (url.searchParams.toString()
+                                  ? "?" + url.searchParams.toString()
+                                  : "");
+                              window.history.replaceState({}, "", newUrl);
                             }}
                             className="ml-2 rounded-md bg-gray-200 px-3 text-sm text-black hover:bg-gray-300"
                           >
@@ -205,7 +241,61 @@ function NavBar({ children }) {
                   </div>
                 </div>
 
-                <Disclosure.Panel className="md:hidden bg-[#fffdf6]">
+                <Disclosure.Panel className="md:hidden absolute top-20 left-0 w-full z-40 bg-[#fffdf6] shadow-md rounded-b-md border border-red-500 transition-all duration-300 ease-in-out transform">
+                  <div className="flex justify-end px-4 pt-4">
+                    <Disclosure.Button className="text-gray-500 hover:text-black">
+                      <XMarkIcon className="h-6 w-6" />
+                    </Disclosure.Button>
+                  </div>
+                  <div className="block md:hidden px-4 pt-2">
+                    <div className="w-full">
+                      <div className="flex">
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) =>
+                            dispatch(setSearchQuery(e.target.value))
+                          }
+                          placeholder="Search for products, brands and more"
+                          className="flex-grow rounded-l-md border border-gray-300 bg-[#E8F6F7] px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") handleSearch();
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={handleSearch}
+                          className="rounded-r-md bg-orange-500 px-4 text-sm text-white hover:bg-orange-600"
+                        >
+                          Search
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            dispatch(setSearchQuery(""));
+                            dispatch(
+                              fetchProductsByFiltersAsync({
+                                filter: {},
+                                sort: {},
+                                pagination: { _page: 1, _limit: 10 },
+                              })
+                            );
+                            const url = new URL(window.location);
+                            url.searchParams.delete("q");
+                            const newUrl =
+                              url.pathname +
+                              (url.searchParams.toString()
+                                ? "?" + url.searchParams.toString()
+                                : "");
+                            window.history.replaceState({}, "", newUrl);
+                          }}
+                          className="ml-2 rounded-md bg-gray-200 px-3 text-sm text-black hover:bg-gray-300"
+                        >
+                          Reset
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                   <div className="space-y-1 px-4 pb-3 pt-2">
                     {navigation.map((item) =>
                       item[userInfo.role] ? (
@@ -271,7 +361,7 @@ function NavBar({ children }) {
           </main>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
