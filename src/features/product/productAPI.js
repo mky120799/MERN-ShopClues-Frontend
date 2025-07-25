@@ -40,14 +40,15 @@ export function updateProduct(update) {
   });
 }
 
-export function fetchProductsByFilters(filter, sort, pagination, admin) {
-  console.log("these are the filters", filter, sort, pagination, admin);
+export function fetchProductsByFilters(filter, sort, pagination, admin, search) {
+  console.log("these are the filters", filter, sort, pagination, admin,search);
   // filter = {"category":["smartphone","laptops"]}
   // sort = {_sort:"price",_order="desc"}
   // pagination = {_page:1,_limit=10}
 
   let queryString = '';
   for (let key in filter) {
+    if (key === 'q') continue;
     const categoryValues = filter[key];
     if (categoryValues.length) {
       queryString += `${key}=${categoryValues}&`;
@@ -59,10 +60,14 @@ export function fetchProductsByFilters(filter, sort, pagination, admin) {
   for (let key in pagination) {
     queryString += `${key}=${pagination[key]}&`;
   }
+  if (search && search.trim()) {
+    queryString += `q=${encodeURIComponent(search)}&`;//
+  }
   if(admin){
     queryString += `admin=true`;
   }
 
+  console.log("Final Query:", `${BASE_URL}/products?` + queryString);
   return new Promise(async (resolve) => {
     const response = await fetch(`${BASE_URL}/products?` + queryString, {
       credentials: 'include',
@@ -92,3 +97,6 @@ export function fetchBrands() {
     resolve({ data });
   });
 }
+
+
+// search query//

@@ -1,4 +1,7 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import companyLogo from '../../assets/download.svg';
 import userLogo from '../../assets/user.png'
 import { Disclosure, Menu, Transition } from '@headlessui/react';
@@ -9,10 +12,10 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectItems } from '../cart/cartSlice';
+import { selectItems,fetchItemsByUserIdAsync} from '../cart/cartSlice';
 import { selectLoggedInUser } from '../auth/authSlice';
 import { selectUserInfo } from '../user/userSlice';
+import { fetchProductsByFiltersAsync, setSearchQuery } from '../product/productSlice';
 
 
 const navigation = [
@@ -32,17 +35,34 @@ function classNames(...classes) {
 }
 
 function NavBar({ children }) {
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch(fetchItemsByUserIdAsync);
+  },[dispatch])
   const items = useSelector(selectItems);
   const userInfo = useSelector(selectUserInfo);
+  const searchQuery = useSelector((state) => state.product.searchQuery);
+  
+  const navigate = useNavigate();
   console.log('userInfo', userInfo);
-  console.log('items', items);
+  console.log('items in navbar', items);
+  
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/products?q=${searchQuery.trim()}`);
+    }
+  };
 
 
   return (
     <>
       {userInfo && (
         <div className="min-h-full">
-          <Disclosure as="nav" className="bg-[#FFFFFF] shadow-md fixed top-0 w-full z-50">
+          <Disclosure
+            as="nav"
+            className="bg-[#FFFFFF] shadow-md fixed top-0 w-full z-50"
+          >
             {({ open }) => (
               <>
                 <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
@@ -85,14 +105,36 @@ function NavBar({ children }) {
                         <div className="flex">
                           <input
                             type="text"
+                            value={searchQuery}
+                            onChange={(e) => dispatch(setSearchQuery(e.target.value))}
                             placeholder="Search for products, brands and more"
                             className="flex-grow rounded-l-md border border-gray-300 bg-[#E8F6F7] px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleSearch();
+                            }}
                           />
                           <button
                             type="button"
+                            onClick={handleSearch}
                             className="rounded-r-md bg-orange-500 px-4 text-sm text-white hover:bg-orange-600"
                           >
                             Search
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              dispatch(setSearchQuery(''));
+                              dispatch(fetchProductsByFiltersAsync({ filter: {}, sort: {}, pagination: { _page: 1, _limit: 10 } }));
+
+                              // Remove 'q' query parameter from URL and clear location search
+                              const url = new URL(window.location);
+                              url.searchParams.delete('q');
+                              const newUrl = url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : '');
+                              window.history.replaceState({}, '', newUrl);
+                            }}
+                            className="ml-2 rounded-md bg-gray-200 px-3 text-sm text-black hover:bg-gray-300"
+                          >
+                            Reset
                           </button>
                         </div>
                       </div>
@@ -128,7 +170,6 @@ function NavBar({ children }) {
                                 src={userLogo}
                                 alt=""
                               />
-                             
                             </Menu.Button>
                           </div>
                           <Transition
@@ -161,7 +202,6 @@ function NavBar({ children }) {
                         </Menu>
                       </div>
                     </div>
-                    
                   </div>
                 </div>
 
@@ -184,10 +224,14 @@ function NavBar({ children }) {
                   <div className="border-t border-gray-300 px-4 py-4">
                     <div className="flex items-center justify-between space-x-4">
                       <div className="flex items-center space-x-2">
-                       <UserCircleIcon className="h-8 w-8" color="#8BC9D5" />
+                        <UserCircleIcon className="h-8 w-8" color="#8BC9D5" />
                         <div>
-                          <p className="text-sm font-semibold text-gray-800">{userInfo.name}</p>
-                          <p className="text-xs text-gray-600">{userInfo.email}</p>
+                          <p className="text-sm font-semibold text-gray-800">
+                            {userInfo.name}
+                          </p>
+                          <p className="text-xs text-gray-600">
+                            {userInfo.email}
+                          </p>
                         </div>
                       </div>
                       <Link to="/cart" className="relative">
@@ -199,7 +243,6 @@ function NavBar({ children }) {
                         )}
                       </Link>
                     </div>
-
                   </div>
 
                   <div className="mt-3 space-y-1 px-4">

@@ -37,14 +37,14 @@ export function fetchAllOrders(sort, pagination) {
   }
 
   return new Promise(async (resolve) => {
-    const response = await fetch(
-      '/orders?' + queryString,
+    const response = await fetch(`${BASE_URL}/orders?` + queryString,
       {
         credentials: 'include',
       }
     );
     const data = await response.json();
     const totalOrders = await response.headers.get('X-Total-Count');
+    console.log('orders data in orderAPI',totalOrders)
     resolve({ data: { orders: data, totalOrders: +totalOrders } });
   });
 }

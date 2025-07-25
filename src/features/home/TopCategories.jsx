@@ -1,76 +1,37 @@
-// src/features/home/TopCategories.jsx
-
-import React from "react";
-
-const categories = [
-  {
-    id: 1,
-    name: "Mobiles & Accessories",
-    image:
-      "https://cdn.shopclues.com/images1/thumbnails/116301/280/1/150681869-116301638-1688369559.jpg",
-  },
-  {
-    id: 2,
-    name: "Fashion Store",
-    image:
-      "https://cdn.shopclues.com/images1/thumbnails/116314/280/1/150681869-116314411-1688372105.jpg",
-  },
-  {
-    id: 3,
-    name: "Home & Kitchen",
-    image:
-      "https://cdn.shopclues.com/images1/thumbnails/116313/280/1/150681869-116313899-1688371723.jpg",
-  },
-  {
-    id: 4,
-    name: "Daily Essentials",
-    image:
-      "https://cdn.shopclues.com/images1/thumbnails/116312/280/1/150681869-116312627-1688371331.jpg",
-  },
-  {
-    id: 5,
-    name: "Refurbished Store",
-    image:
-      "https://cdn.shopclues.com/images1/thumbnails/116299/280/1/150681869-116299707-1688369278.jpg",
-  },
-  {
-    id: 6,
-    name: "Refurbished Store",
-    image:
-      "https://cdn.shopclues.com/images1/thumbnails/116299/280/1/150681869-116299707-1688369278.jpg",
-  },
-  {
-    id: 7,
-    name: "Refurbished Store",
-    image:
-      "https://cdn.shopclues.com/images1/thumbnails/116299/280/1/150681869-116299707-1688369278.jpg",
-  },
-  {
-    id: 8,
-    name: "Refurbished Store",
-    image:
-      "https://cdn.shopclues.com/images1/thumbnails/116299/280/1/150681869-116299707-1688369278.jpg",
-  },
-];
+import React, { useEffect, useState } from "react";
 
 function TopCategories() {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetch("https://dummyjson.com/products/category/mens-shoes")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.products && Array.isArray(data.products)) {
+          setCategories(data.products);
+        }
+      })
+      .catch((err) => console.error("Failed to fetch categories:", err));
+  }, []);
+  console.log("categories in top category",categories)
+
   return (
     <div className="bg-white p-4 shadow-md rounded-md mt-6">
       <h2 className="text-lg font-semibold text-gray-800 mb-4">
         🎯 Top Categories
       </h2>
       <div className="overflow-x-auto whitespace-nowrap space-x-4 flex p-2">
-        {categories.map((cat) => (
+        {categories.map((product) => (
           <div
-            key={cat.id}
-            className="inline-block w-40 flex-shrink-0 border rounded-md p-2 hover:shadow-sm transition-all text-center bg-white"
+            key={product.id}
+            className="inline-block w-70 flex-shrink-0 border rounded-md p-2 transition-all text-center bg-white hover:scale-105 hover:shadow-lg transform duration-300"
           >
             <img
-              src={cat.image}
-              alt={cat.name}
-              className="h-24 mx-auto object-contain"
+              src={product.thumbnail}
+              alt={product.title}
+              className="h-24 w-full object-contain mb-2 transform transition-transform duration-300 hover:scale-110"
             />
-            <p className="mt-2 text-sm text-gray-700">{cat.name}</p>
+            <p className="text-sm text-gray-700">{product.title}</p>
           </div>
         ))}
       </div>

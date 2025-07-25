@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { BASE_URL } from "../config/baseUrl";
 import {
   PaymentElement,
   useStripe,
@@ -11,7 +12,7 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   const currentOrder = useSelector(selectCurrentOrder);
-
+  console.log('current order in checkoutform of stripe',currentOrder)
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 

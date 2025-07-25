@@ -18,8 +18,9 @@ export function fetchItemsByUserId() {
     const response = await fetch(`${BASE_URL}/cart`, {
       credentials: "include",
     });
-    console.log()
+    
     const data = await response.json();
+    console.log(data);
     resolve({ data });
   });
 }

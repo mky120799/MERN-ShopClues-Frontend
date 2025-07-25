@@ -40,6 +40,9 @@ function Checkout() {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState(null);
 
+  // Log currentOrder at the top level of the component
+  console.log('🧾 currentOrder from checkout form:', currentOrder);
+
   const handleQuantity = (e, item) => {
     dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }));
   };
@@ -69,16 +72,33 @@ function Checkout() {
         selectedAddress,
         status: 'pending', // other status can be delivered, received.
       };
+      // Debug log before dispatch
+      console.log("🚀 Creating Order with:", {
+        items,
+        totalAmount,
+        totalItems,
+        user: user.id,
+        paymentMethod,
+        selectedAddress,
+        status: 'pending',
+      });
       dispatch(createOrderAsync(order));
+      console.log("✅ createOrderAsync dispatched");
       // need to redirect from here to a new page of order success.
     } else {
-      
       alert('Enter Address and Payment method');
     }
   };
 
   return (
     <>
+      {(() => {
+        // Add debug logs inside the return block, above Navigate logic
+        console.log('🛍️ Cart Items:', items);
+        console.log('📦 Payment Method:', paymentMethod);
+        console.log('🏠 Selected Address:', selectedAddress);
+        return null;
+      })()}
       {!items.length && <Navigate to="/" replace={true}></Navigate>}
       {currentOrder && currentOrder.paymentMethod === "cash" && (
         <Navigate

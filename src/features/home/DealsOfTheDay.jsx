@@ -1,69 +1,38 @@
-// src/features/home/DealsOfTheDay.jsx
+// import firstItem from "../../assets/dealsOfDay/imgi_86_153596495-117910384-1728887255.jpg";
+// import secondItem from "../../assets/dealsOfDay/imgi_107_149847355-107160132-1590790597.jpg";
+// import thirdItem from "../../assets/dealsOfDay/imgi_106_142772233-95250978-1544273464.jpg";
+// import fourthItem from "../../assets/dealsOfDay/imgi_88_153596496-117910369-1728823521.jpg";
+// import fifthItem from "../../assets/dealsOfDay/imgi_92_153500910-117557643-1709640783.jpg";
+// import sixth
 
-import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProductsByFiltersAsync, selectAllProducts } from "../product/productSlice";
+import { useEffect } from "react";
 
 function DealsOfTheDay() {
-  const [deals, setDeals] = useState([]);
+  const dispatch = useDispatch();
+  const products = useSelector(selectAllProducts);
+  console.log('products from deals of the day', products);
 
   useEffect(() => {
-    // Replace with actual API if available
-    const dummyDeals = [
-      {
-        id: 1,
-        image:
-          "https://cdn.shopclues.com/images1/thumbnails/116369/280/1/150681869-116369973-1688472145.jpg",
-        title: "Smartwatch @ ₹599",
-      },
-      {
-        id: 2,
-        image:
-          "https://cdn.shopclues.com/images1/thumbnails/116389/280/1/150681869-116389107-1688463544.jpg",
-        title: "Wireless Earbuds @ ₹799",
-      },
-      {
-        id: 3,
-        image:
-          "https://cdn.shopclues.com/images1/thumbnails/116369/280/1/150681869-116369985-1688472163.jpg",
-        title: "Sneakers Starting ₹499",
-      },
-      {
-        id: 4,
-        image:
-          "https://cdn.shopclues.com/images1/thumbnails/116369/280/1/150681869-116369985-1688472163.jpg",
-        title: "Sneakers Starting ₹499",
-      },
-      {
-        id: 5,
-        image:
-          "https://cdn.shopclues.com/images1/thumbnails/116369/280/1/150681869-116369985-1688472163.jpg",
-        title: "Sneakers Starting ₹499",
-      },
-      {
-        id: 6,
-        image:
-          "https://cdn.shopclues.com/images1/thumbnails/116369/280/1/150681869-116369985-1688472163.jpg",
-        title: "Sneakers Starting ₹499",
-      },
-    ];
-
-    setDeals(dummyDeals);
-  }, []);
+    dispatch(fetchProductsByFiltersAsync({ filter: {}, sort: {}, pagination: { _page: 1, _limit: 10 }, admin: false }));
+  }, [dispatch]);
 
   return (
-    <div className="bg-white p-4 shadow-md rounded-md mt-4">
+    <div className="bg-white p-4 shadow-md rounded-md mt-4 min-h-[300px]">
       <h2 className="text-lg font-semibold text-gray-800 mb-3">
         🔥 Deals of the Day
       </h2>
       <div className="flex overflow-x-auto gap-4 scrollbar-hide">
-        {deals.map((deal) => (
+        {products?.map((deal) => (
           <div
             key={deal.id}
-            className="flex-none w-64 gap-3 items-center border p-2 rounded hover:shadow-sm transition-all"
+            className="group flex-none w-72 p-4 rounded-lg bg-white border border-gray-300 transition-all duration-300 transform hover:scale-100 hover:shadow-2xl hover:border-gray-500"
           >
             <img
-              src={deal.image}
+              src={deal.images[0]}
               alt={deal.title}
-              className="w-16 h-16 object-contain rounded"
+              className="w-40 h-40 object-contain rounded transition-transform duration-300 group-hover:scale-110"
             />
             <p className="text-sm font-medium text-gray-700">{deal.title}</p>
           </div>

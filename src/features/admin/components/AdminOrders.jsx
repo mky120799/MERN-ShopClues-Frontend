@@ -19,6 +19,7 @@ function AdminOrders() {
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const orders = useSelector(selectOrders);
+  console.log('order object in adminOrder page',orders)
   const totalOrders = useSelector(selectTotalOrders);
   const [editableOrderId, setEditableOrderId] = useState(-1);
   const [sort, setSort] = useState({});

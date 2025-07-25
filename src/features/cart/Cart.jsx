@@ -1,7 +1,8 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   deleteItemFromCartAsync,
+  fetchItemsByUserIdAsync,
   selectCartLoaded,
   selectCartStatus,
   selectItems,
@@ -14,7 +15,9 @@ import Modal from '../common/Modal';
 
 export default function Cart() {
   const dispatch = useDispatch();
-
+  useEffect(()=>{
+    dispatch(fetchItemsByUserIdAsync())
+  },[dispatch])
   const items = useSelector(selectItems);
   const status = useSelector(selectCartStatus);
   const cartLoaded = useSelector(selectCartLoaded)
