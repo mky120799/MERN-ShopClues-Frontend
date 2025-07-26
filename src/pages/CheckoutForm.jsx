@@ -12,7 +12,7 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   const currentOrder = useSelector(selectCurrentOrder);
-  console.log('current order in checkoutform of stripe',currentOrder)
+  console.log('current order in checkoutform of stripe', currentOrder)
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -62,7 +62,7 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: `http://localhost:8080/order-success/${currentOrder.id}`,
+        return_url: `https://mern-shop-clues-backend.vercel.app/order-success/${currentOrder.id}`,
       },
     });
 
