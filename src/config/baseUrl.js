@@ -1,1 +1,1 @@
-export const BASE_URL ="http://mern-shop-clues-backend-main.vercel.app";
+export const BASE_URL ="https://mern-shop-clues-backend-main.vercel.app";
