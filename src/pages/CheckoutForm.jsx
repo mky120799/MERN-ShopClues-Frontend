@@ -15,7 +15,7 @@ export default function CheckoutForm() {
   console.log('current order in checkoutform of stripe', currentOrder)
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  console.log('in ckeckout form this is current order', currentOrder);
   useEffect(() => {
     if (!stripe) {
       return;
@@ -62,7 +62,7 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: `https://mern-shopclues-project.onrender.com/order-success/${currentOrder.id}`,
+        return_url: `https://mern-shopclues-frontend.onrender.com/order-success/${currentOrder.id}`,
       },
     });
 
