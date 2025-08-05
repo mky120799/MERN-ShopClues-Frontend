@@ -27,6 +27,7 @@ export function loginUser(loginInfo) {
         console.log('data return from loginUser:',data)
         resolve({ data });
       } else {
+        
         const error = await response.text();
         reject(error);
       }
