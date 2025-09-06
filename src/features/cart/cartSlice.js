@@ -63,47 +63,52 @@ export const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(addToCartAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(addToCartAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        console.log("Item added to store:", action.payload);
+        state.status = "idle";
         state.items.push(action.payload);
       })
       .addCase(fetchItemsByUserIdAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(fetchItemsByUserIdAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = "idle";
         state.items = action.payload;
         state.cartLoaded = true;
       })
       .addCase(fetchItemsByUserIdAsync.rejected, (state, action) => {
-        state.status = 'idle';
+        state.status = "idle";
         state.cartLoaded = true;
       })
       .addCase(updateCartAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(updateCartAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
-        const index =  state.items.findIndex(item=>item.id===action.payload.id)
+        state.status = "idle";
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
         state.items[index] = action.payload;
       })
       .addCase(deleteItemFromCartAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(deleteItemFromCartAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
-        const index =  state.items.findIndex(item=>item.id===action.payload.id)
-        state.items.splice(index,1);
+        state.status = "idle";
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
+        state.items.splice(index, 1);
       })
       .addCase(resetCartAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(resetCartAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = "idle";
         state.items = [];
-      })
+      });
   },
 });
 

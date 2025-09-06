@@ -20,6 +20,7 @@ function classNames(...classes) {
 
 
 export default function AdminProductDetail() {
+  
   const [selectedColor, setSelectedColor] = useState();
   const [selectedSize, setSelectedSize] = useState();
   const items = useSelector(selectItems);
@@ -42,16 +43,16 @@ export default function AdminProductDetail() {
       if (selectedSize) {
         newItem.size = selectedSize;
       }
-      dispatch(addToCartAsync(newItem));
+      dispatch(addToCartAsync(newItem)).then(() => {
+        dispatch(fetchProductByIdAsync(params.id));
+      });
       toast.success('Item added to Cart');
     } else {
       toast.error('Item Already added');
     }
   };
 
-  useEffect(() => {
-    dispatch(fetchProductByIdAsync(params.id));
-  }, [dispatch, params.id]);
+  
 
   return (
     <div className="bg-white">

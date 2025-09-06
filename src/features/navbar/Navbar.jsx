@@ -1,4 +1,5 @@
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState, useRef, useCallback } from 'react';
+import { debounce } from "lodash";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,10 +13,10 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-import { selectItems,fetchItemsByUserIdAsync} from '../cart/cartSlice';
+import { selectItems, fetchItemsByUserIdAsync } from '../cart/cartSlice';
 import { selectLoggedInUser } from '../auth/authSlice';
 import { selectUserInfo } from '../user/userSlice';
-import { fetchProductsByFiltersAsync, setSearchQuery } from '../product/productSlice';
+import { fetchProductsByFiltersAsync, setSearchQuery, selectProducts, selectSearchQuery } from '../product/productSlice';
 
 
 const navigation = [
@@ -36,28 +37,107 @@ function classNames(...classes) {
 
 function NavBar({ children }) {
   const dispatch = useDispatch();
-  useEffect(()=>{
-    dispatch(fetchItemsByUserIdAsync);
-  },[dispatch])
+  const navigate = useNavigate();
   const items = useSelector(selectItems);
   const userInfo = useSelector(selectUserInfo);
-  const searchQuery = useSelector((state) => state.product.searchQuery);
-  
-  const navigate = useNavigate();
-  console.log('userInfo', userInfo);
-  console.log('items in navbar', items);
-  
+  const products = useSelector(selectProducts);
+  const searchQuery = useSelector(selectSearchQuery);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const inputRef = useRef(null);
+  const dropdownRef = useRef(null);
+  // Debounced search dispatch
+  // Only search if query is not empty
+  // Only fetch up to 5 results for dropdown
+  const debouncedFetch = useCallback(
+    debounce((query) => {
+      if (query && query.trim()) {
+        dispatch(
+          fetchProductsByFiltersAsync({
+            filter: { q: query.trim() },
+            sort: {},
+            pagination: { _page: 1, _limit: 5 },
+          })
+        );
+        setShowDropdown(true);
+      } else {
+        setShowDropdown(false);
+      }
+    }, 300),
+    [dispatch]
+  );
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      navigate(`/products?q=${searchQuery.trim()}`);
+  useEffect(() => {
+    debouncedFetch(searchQuery);
+    // If input is cleared, close dropdown
+    if (!searchQuery || !searchQuery.trim()) {
+      setShowDropdown(false);
+    }
+    // Cleanup on unmount
+    return () => {
+      debouncedFetch.cancel();
+    };
+  }, [searchQuery, debouncedFetch]);
+
+  // Hide dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target)
+      ) {
+        setShowDropdown(false);
+      }
+    }
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
+
+  const handleSearch = (queryParam) => {
+    const q = typeof queryParam === "string" ? queryParam : searchQuery;
+    if (q && q.trim()) {
+      setShowDropdown(false);
+      navigate(`/products?q=${encodeURIComponent(q.trim())}`);
     }
   };
 
+  const handleInputChange = (e) => {
+    dispatch(setSearchQuery(e.target.value));
+  };
+
+  const handleDropdownSelect = (product) => {
+    setShowDropdown(false);
+    dispatch(setSearchQuery(product.title));
+    navigate(`/products/${product.id}`);
+  };
+
+  const handleReset = () => {
+    dispatch(setSearchQuery(""));
+    dispatch(
+      fetchProductsByFiltersAsync({
+        filter: {},
+        sort: {},
+        pagination: { _page: 1, _limit: 10 },
+      })
+    );
+    setShowDropdown(false);
+    const url = new URL(window.location);
+    url.searchParams.delete("q");
+    const newUrl =
+      url.pathname +
+      (url.searchParams.toString()
+        ? "?" + url.searchParams.toString()
+        : "");
+    window.history.replaceState({}, "", newUrl);
+  };
 
   return (
     <div>
-      {" "}
       {userInfo && (
         <div className="min-h-full">
           <Disclosure
@@ -130,49 +210,60 @@ function NavBar({ children }) {
                       <div className="w-full md:max-w-lg relative">
                         <div className="flex">
                           <input
+                            ref={inputRef}
                             type="text"
                             value={searchQuery}
-                            onChange={(e) =>
-                              dispatch(setSearchQuery(e.target.value))
-                            }
+                            onChange={handleInputChange}
                             placeholder="Search for products, brands and more"
                             className="flex-grow rounded-l-md border border-gray-300 bg-[#E8F6F7] px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             onKeyDown={(e) => {
                               if (e.key === "Enter") handleSearch();
                             }}
+                            autoComplete="off"
                           />
                           <button
                             type="button"
-                            onClick={handleSearch}
+                            onClick={() => handleSearch()}
                             className="rounded-r-md bg-orange-500 px-4 text-sm text-white hover:bg-orange-600"
                           >
                             Search
                           </button>
                           <button
                             type="button"
-                            onClick={() => {
-                              dispatch(setSearchQuery(""));
-                              dispatch(
-                                fetchProductsByFiltersAsync({
-                                  filter: {},
-                                  sort: {},
-                                  pagination: { _page: 1, _limit: 10 },
-                                })
-                              );
-                              const url = new URL(window.location);
-                              url.searchParams.delete("q");
-                              const newUrl =
-                                url.pathname +
-                                (url.searchParams.toString()
-                                  ? "?" + url.searchParams.toString()
-                                  : "");
-                              window.history.replaceState({}, "", newUrl);
-                            }}
+                            onClick={handleReset}
                             className="ml-2 rounded-md bg-gray-200 px-3 text-sm text-black hover:bg-gray-300"
                           >
                             Reset
                           </button>
                         </div>
+                        {showDropdown && products && products.length > 0 && (
+                          <div
+                            ref={dropdownRef}
+                            className="absolute left-0 right-0 mt-1 z-50 bg-white border border-gray-200 rounded-md shadow-lg max-h-72 overflow-y-auto"
+                          >
+                            {products.map((product) => (
+                              <div
+                                key={product.id}
+                                className="px-4 py-2 cursor-pointer hover:bg-gray-100 flex items-center"
+                                onMouseDown={() => handleDropdownSelect(product)}
+                              >
+                                <img
+                                  src={product.thumbnail}
+                                  alt={product.title}
+                                  className="h-8 w-8 object-cover rounded mr-3"
+                                />
+                                <div>
+                                  <div className="font-medium text-gray-900 text-sm">
+                                    {product.title}
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    {product.brand}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -251,49 +342,60 @@ function NavBar({ children }) {
                     <div className="w-full">
                       <div className="flex">
                         <input
+                          ref={inputRef}
                           type="text"
                           value={searchQuery}
-                          onChange={(e) =>
-                            dispatch(setSearchQuery(e.target.value))
-                          }
+                          onChange={handleInputChange}
                           placeholder="Search for products, brands and more"
                           className="flex-grow rounded-l-md border border-gray-300 bg-[#E8F6F7] px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                           onKeyDown={(e) => {
                             if (e.key === "Enter") handleSearch();
                           }}
+                          autoComplete="off"
                         />
                         <button
                           type="button"
-                          onClick={handleSearch}
+                          onClick={() => handleSearch()}
                           className="rounded-r-md bg-orange-500 px-4 text-sm text-white hover:bg-orange-600"
                         >
                           Search
                         </button>
                         <button
                           type="button"
-                          onClick={() => {
-                            dispatch(setSearchQuery(""));
-                            dispatch(
-                              fetchProductsByFiltersAsync({
-                                filter: {},
-                                sort: {},
-                                pagination: { _page: 1, _limit: 10 },
-                              })
-                            );
-                            const url = new URL(window.location);
-                            url.searchParams.delete("q");
-                            const newUrl =
-                              url.pathname +
-                              (url.searchParams.toString()
-                                ? "?" + url.searchParams.toString()
-                                : "");
-                            window.history.replaceState({}, "", newUrl);
-                          }}
+                          onClick={handleReset}
                           className="ml-2 rounded-md bg-gray-200 px-3 text-sm text-black hover:bg-gray-300"
                         >
                           Reset
                         </button>
                       </div>
+                      {showDropdown && products && products.length > 0 && (
+                        <div
+                          ref={dropdownRef}
+                          className="absolute left-0 right-0 mt-1 z-50 bg-white border border-gray-200 rounded-md shadow-lg max-h-72 overflow-y-auto"
+                        >
+                          {products.map((product) => (
+                            <div
+                              key={product.id}
+                              className="px-4 py-2 cursor-pointer hover:bg-gray-100 flex items-center"
+                              onMouseDown={() => handleDropdownSelect(product)}
+                            >
+                              <img
+                                src={product.thumbnail}
+                                alt={product.title}
+                                className="h-8 w-8 object-cover rounded mr-3"
+                              />
+                              <div>
+                                <div className="font-medium text-gray-900 text-sm">
+                                  {product.title}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {product.brand}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="space-y-1 px-4 pb-3 pt-2">

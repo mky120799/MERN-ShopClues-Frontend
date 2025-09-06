@@ -20,6 +20,7 @@ function classNames(...classes) {
 
 
 export default function ProductDetail() {
+   
   const [selectedColor, setSelectedColor] = useState();
   const [selectedSize, setSelectedSize] = useState();
   const items = useSelector(selectItems);
@@ -27,7 +28,9 @@ export default function ProductDetail() {
   const dispatch = useDispatch();
   const params = useParams();
   const status = useSelector(selectProductListStatus);
-
+ useEffect(() => {
+   dispatch(fetchProductByIdAsync(params.id));
+ }, [dispatch, params.id]);
   const handleCart = (e) => {
     e.preventDefault();
     if (items.findIndex((item) => item.product.id === product.id) < 0) {
@@ -43,15 +46,14 @@ export default function ProductDetail() {
         newItem.size = selectedSize;
       }
       dispatch(addToCartAsync({ item: newItem }));
+       dispatch(fetchProductByIdAsync(params.id));
       toast.success('Item added to cart!');
     } else {
       toast.error('Item Already added');
     }
   };
 
-  useEffect(() => {
-    dispatch(fetchProductByIdAsync(params.id));
-  }, [dispatch, params.id]);
+
 
   return (
     <div className="bg-white">

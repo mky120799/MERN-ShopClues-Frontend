@@ -6013,7 +6013,7 @@
 
   console.log(products.length)
 
-  const brands = [...new Set(products.map((p) => p.brand).filter(Boolean))];
+  const brands = [...new Set(products.map((p) => p.category).filter(Boolean))];
 
   const category = brands.map((c) => ({
     value: c,
@@ -6021,4 +6021,4 @@
     checked: false,
   }));
 
-  console.log(category);
+  console.log(JSON.stringify(category));
